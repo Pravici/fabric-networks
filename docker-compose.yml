@@ -5,9 +5,6 @@
 #
 version: '2'
 
-networks:
-  basic:
-
 services:
   ca.example.com:
     image: hyperledger/fabric-ca
@@ -22,8 +19,6 @@ services:
     volumes:
       - ./crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.example.com
-    networks:
-      - basic
 
   orderer.example.com:
     container_name: orderer.example.com
@@ -43,8 +38,6 @@ services:
         - ./config/:/etc/hyperledger/configtx
         - ./crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peerOrg1
-    networks:
-      - basic
 
   peer0.org1.example.com:
     container_name: peer0.org1.example.com
@@ -81,12 +74,9 @@ services:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/msp/peer
         - ./crypto-config/peerOrganizations/org1.example.com/users:/etc/hyperledger/msp/users
-        - ./config:/etc/hyperledger/configtx
     depends_on:
       - orderer.example.com
       - couchdb
-    networks:
-      - basic
 
   couchdb:
     container_name: couchdb
@@ -98,8 +88,6 @@ services:
       - COUCHDB_PASSWORD=
     ports:
       - 5984:5984
-    networks:
-      - basic
 
   cli:
     container_name: cli
@@ -112,17 +100,16 @@ services:
       - CORE_PEER_ID=cli
       - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp
       - CORE_CHAINCODE_KEEPALIVE=10
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
     volumes:
         - /var/run/:/host/var/run/
-        - ./../chaincode/:/opt/gopath/src/github.com/
-        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
-    networks:
-        - basic
-    #depends_on:
-    #  - orderer.example.com
-    #  - peer0.org1.example.com
-    #  - couchdb
+        - ./config:/etc/hyperledger/configtx
+        - ./chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode/
+        - ./crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp:/etc/hyperledger/msp
+    depends_on:
+     - orderer.example.com
+     - peer0.org1.example.com
+     - couchdb

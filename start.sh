@@ -1,19 +1,9 @@
 #!/bin/bash
-#
-# Copyright IBM Corp All Rights Reserved
-#
-# SPDX-License-Identifier: Apache-2.0
-#
-# Exit on first error, print all commands.
 set -ev
 
-# don't rewrite paths for Windows Git Bash users
-export MSYS_NO_PATHCONV=1
-
-
 export HFC_LOGGING='{"debug":"console","info":"console"}'
-docker-compose -f docker-compose.yml down
 
+docker-compose -f docker-compose.yml down
 docker-compose -f docker-compose.yml up -d ca.example.com orderer.example.com peer0.org1.example.com couchdb cli
 
 # wait for Hyperledger Fabric to start
@@ -22,12 +12,23 @@ export FABRIC_START_TIMEOUT=10
 #echo ${FABRIC_START_TIMEOUT}
 sleep ${FABRIC_START_TIMEOUT}
 
-
 ca_local=$( curl -X PUT http://127.0.0.1:5984/wallet )
-
 echo $ca_local
 
+CHANNEL="mychannel"
+CC_NAME="tlp"
+CC_LANG="node"
+CC_VERSION="1.0"
+CC_PATH="./chaincode"
+
 # Create the channel
-docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer0.org1.example.com peer channel create -o orderer.example.com:7050 -c mychannel -f /etc/hyperledger/configtx/channel.tx
+docker exec cli bash -c "peer channel create -o orderer.example.com:7050 -c $CHANNEL -f /etc/hyperledger/configtx/channel.tx"
+
 # Join peer0.org1.example.com to the channel.
-docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer0.org1.example.com peer channel join -b mychannel.block
+docker exec cli bash -c "peer channel join -b $CHANNEL.block"
+
+# List channels
+docker exec cli bash -c "peer channel list"
+
+# Install chaincode
+docker exec cli bash -c "peer chaincode install -n $CC_NAME -l $CC_LANG -v $CC_VERSION --path $CC_PATH"

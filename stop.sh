@@ -1,11 +1,14 @@
 #!/bin/bash
-#
-# Copyright IBM Corp All Rights Reserved
-#
-# SPDX-License-Identifier: Apache-2.0
-#
-# Exit on first error, print all commands.
 set -ev
 
+TARGET_ENV=$1
+if [ -z $TARGET_ENV ] 
+  then
+    echo "usage: ./start.sh dev|prod"
+    exit 1
+fi
+
+COMPOSE_FILENAME="docker-compose.$TARGET_ENV.yml"
+
 # Shut down the Docker containers that might be currently running.
-docker-compose -f docker-compose.yml stop
+docker-compose -f $COMPOSE_FILENAME stop

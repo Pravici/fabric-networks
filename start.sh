@@ -1,13 +1,20 @@
 #!/bin/bash
 set -ev
 
-export HFC_LOGGING='{"debug":"console","info":"console"}'
+TARGET_ENV=$1
+if [ -z $TARGET_ENV ] 
+  then
+    echo "usage: ./start.sh dev|prod"
+    exit 1
+fi
 
-docker-compose -f docker-compose.yml down
-docker-compose -f docker-compose.yml up -d ca.example.com orderer.example.com peer0.org1.example.com couchdb cli
+COMPOSE_FILENAME="docker-compose.$TARGET_ENV.yml"
+docker-compose -f $COMPOSE_FILENAME down
+docker-compose -f $COMPOSE_FILENAME up -d ca.example.com orderer.example.com peer0.org1.example.com couchdb cli
 
 # wait for Hyperledger Fabric to start
 # incase of errors when running later commands, issue export FABRIC_START_TIMEOUT=<larger number>
+export HFC_LOGGING='{"debug":"console","info":"console"}'
 export FABRIC_START_TIMEOUT=10
 #echo ${FABRIC_START_TIMEOUT}
 sleep ${FABRIC_START_TIMEOUT}
@@ -32,3 +39,7 @@ docker exec cli bash -c "peer channel list"
 
 # Install chaincode
 docker exec cli bash -c "peer chaincode install -n $CC_NAME -l $CC_LANG -v $CC_VERSION --path $CC_PATH"
+
+if [ $TARGET_ENV = "prod" ]; then
+    ./instantiate.sh
+fi

@@ -7,8 +7,17 @@
 # Exit on first error, print all commands.
 set -e
 
+TARGET_ENV=$1
+if [ -z $TARGET_ENV ] 
+  then
+    echo "usage: ./teardown.sh dev|prod"
+    exit 1
+fi
+
+COMPOSE_FILENAME="docker-compose.$TARGET_ENV.yml"
+
 # Shut down the Docker containers for the system tests.
-docker-compose -f docker-compose.yml kill && docker-compose -f docker-compose.yml down
+docker-compose -f $COMPOSE_FILENAME kill && docker-compose -f $COMPOSE_FILENAME down
 
 # remove the local state
 rm -f ~/.hfc-key-store/*

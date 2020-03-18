@@ -39,3 +39,7 @@ docker exec cli bash -c "peer channel list"
 
 # Install chaincode
 docker exec cli bash -c "peer chaincode install -n $CC_NAME -l $CC_LANG -v $CC_VERSION --path $CC_PATH"
+
+if [ $TARGET_ENV = "prod" ]; then
+    ./instantiate.sh
+fi

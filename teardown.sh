@@ -10,7 +10,7 @@ set -e
 TARGET_ENV=$1
 if [ -z $TARGET_ENV ] 
   then
-    echo "usage: ./start.sh dev|prod"
+    echo "usage: ./teardown.sh dev|prod"
     exit 1
 fi
 

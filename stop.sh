@@ -4,7 +4,7 @@ set -ev
 TARGET_ENV=$1
 if [ -z $TARGET_ENV ] 
   then
-    echo "usage: ./start.sh dev|prod"
+    echo "usage: ./stop.sh dev|prod"
     exit 1
 fi
 

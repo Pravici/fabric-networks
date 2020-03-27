@@ -22,17 +22,22 @@ sleep ${FABRIC_START_TIMEOUT}
 ca_local=$( curl -X PUT http://127.0.0.1:5984/wallet )
 echo $ca_local
 
-CHANNEL="mychannel"
 CC_NAME="tlp"
 CC_LANG="node"
 CC_VERSION="1.0"
 CC_PATH="./chaincode"
 
 # Create the channel
-docker exec cli bash -c "peer channel create -o orderer.example.com:7050 -c $CHANNEL -f /etc/hyperledger/configtx/channel.tx"
+function create_channel {
+  docker exec cli bash -c "peer channel create -o orderer.example.com:7050 -c $1 -f /etc/hyperledger/configtx/$1.tx"
+  # Join peer0.org1.example.com to the channel.
+  docker exec cli bash -c "peer channel join -b $1.block"
+}
 
-# Join peer0.org1.example.com to the channel.
-docker exec cli bash -c "peer channel join -b $CHANNEL.block"
+create_channel 'mychannel'
+create_channel 'demo1'
+create_channel 'demo2'
+create_channel 'demo3'
 
 # List channels
 docker exec cli bash -c "peer channel list"

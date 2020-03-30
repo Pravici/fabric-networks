@@ -17,7 +17,7 @@ fi
 COMPOSE_FILENAME="docker-compose.$TARGET_ENV.yml"
 
 # Shut down the Docker containers for the system tests.
-docker-compose -f $COMPOSE_FILENAME kill && docker-compose -f $COMPOSE_FILENAME down
+docker-compose -f $COMPOSE_FILENAME kill && docker-compose -f $COMPOSE_FILENAME down -v
 
 # remove the local state
 rm -f ~/.hfc-key-store/*

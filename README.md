@@ -7,6 +7,12 @@ configtxgen -channelID mychannel -outputCreateChannelTx ./config/mychannel.tx -p
 configtxgen -channelID demo1 -outputCreateChannelTx ./config/demo1.tx -profile OneOrgChannel
 configtxgen -channelID demo2 -outputCreateChannelTx ./config/demo2.tx -profile OneOrgChannel
 configtxgen -channelID demo3 -outputCreateChannelTx ./config/demo3.tx -profile OneOrgChannel
+configtxgen -channelID demo4 -outputCreateChannelTx ./config/demo4.tx -profile OneOrgChannel
+configtxgen -channelID demo5 -outputCreateChannelTx ./config/demo5.tx -profile OneOrgChannel
+configtxgen -channelID demo6 -outputCreateChannelTx ./config/demo6.tx -profile OneOrgChannel
+configtxgen -channelID demo7 -outputCreateChannelTx ./config/demo7.tx -profile OneOrgChannel
+configtxgen -channelID demo8 -outputCreateChannelTx ./config/demo8.tx -profile OneOrgChannel
+configtxgen -channelID demo9 -outputCreateChannelTx ./config/demo9.tx -profile OneOrgChannel
 
 ## Start the Network 
 ```bash

@@ -38,6 +38,12 @@ create_channel 'mychannel'
 create_channel 'demo1'
 create_channel 'demo2'
 create_channel 'demo3'
+create_channel 'demo4'
+create_channel 'demo5'
+create_channel 'demo6'
+create_channel 'demo7'
+create_channel 'demo8'
+create_channel 'demo9'
 
 # List channels
 docker exec cli bash -c "peer channel list"

@@ -52,7 +52,7 @@ docker exec cli bash -c "peer channel list"
 
 CC_LANG="node"
 CC_VERSION="1.0"
-CC_PATH="./chaincode"
+CC_PATH="chaincode"
 
 # Install chaincode
 function install_chaincode {

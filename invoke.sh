@@ -4,7 +4,7 @@ CHANNEL="mychannel"
 CC_NAME="tlp"
 CC_LANG="node"
 CC_VERSION="1.0"
-CC_PATH="./chaincode"
+CC_PATH="chaincode"
 
 METHOD_NAME=$1
 JSON=$2

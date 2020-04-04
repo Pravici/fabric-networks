@@ -1,20 +1,30 @@
 #!/bin/bash
+set -ev
 
-# Instantiate chaincode
 function instantiate_cc() {
-  docker exec cli bash -c "sleep 3s; peer chaincode instantiate -o orderer.example.com:7050 -n $2 -v 1.0 -C $1 -c '{\"Args\":[\"account:init\"]}'"
+  docker exec cli bash -c "peer chaincode instantiate -o orderer.example.com:7050 -n $2 -v 1.0 -C $1 -c '{\"Args\":[\"init\"]}'"
 }
 
-CHANNEL="mychannel"
-CC_NAME="tlp"
+function instantiate_all_cc {
+  instantiate_cc $1 'tlp-accounts'
+  instantiate_cc $1 'tlp-rates'
+  instantiate_cc $1 'tlp-loyalty'
+}
 
-instantiate_cc 'mychannel' $CC_NAME
-instantiate_cc 'demo1' $CC_NAME
-instantiate_cc 'demo2' $CC_NAME
-instantiate_cc 'demo3' $CC_NAME
-instantiate_cc 'demo4' $CC_NAME
-instantiate_cc 'demo5' $CC_NAME
-instantiate_cc 'demo6' $CC_NAME
-instantiate_cc 'demo7' $CC_NAME
-instantiate_cc 'demo8' $CC_NAME
-instantiate_cc 'demo9' $CC_NAME
+function instantiate_both_channels {
+  instantiate_all_cc "$1general"
+  instantiate_all_cc "$1issuer"
+}
+
+instantiate_all_cc 'mychannel'
+
+instantiate_both_channels 'demo0'
+instantiate_both_channels 'demo1'
+instantiate_both_channels 'demo2'
+instantiate_both_channels 'demo3'
+instantiate_both_channels 'demo4'
+instantiate_both_channels 'demo5'
+instantiate_both_channels 'demo6'
+instantiate_both_channels 'demo7'
+instantiate_both_channels 'demo8'
+instantiate_both_channels 'demo9'

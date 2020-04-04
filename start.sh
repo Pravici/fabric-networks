@@ -22,11 +22,6 @@ sleep ${FABRIC_START_TIMEOUT}
 ca_local=$( curl -X PUT http://127.0.0.1:5984/wallet )
 echo $ca_local
 
-CC_NAME="tlp"
-CC_LANG="node"
-CC_VERSION="1.0"
-CC_PATH="./chaincode"
-
 # Create the channel
 function create_channel {
   docker exec cli bash -c "peer channel create -o orderer.example.com:7050 -c $1 -f /etc/hyperledger/configtx/$1.tx"
@@ -34,22 +29,39 @@ function create_channel {
   docker exec cli bash -c "peer channel join -b $1.block"
 }
 
+function create_both_channels {
+  create_channel "$1general"
+  create_channel "$1issuer"
+}
+
 create_channel 'mychannel'
-create_channel 'demo1'
-create_channel 'demo2'
-create_channel 'demo3'
-create_channel 'demo4'
-create_channel 'demo5'
-create_channel 'demo6'
-create_channel 'demo7'
-create_channel 'demo8'
-create_channel 'demo9'
+
+create_both_channels 'demo0'
+create_both_channels 'demo1'
+create_both_channels 'demo2'
+create_both_channels 'demo3'
+create_both_channels 'demo4'
+create_both_channels 'demo5'
+create_both_channels 'demo6'
+create_both_channels 'demo7'
+create_both_channels 'demo8'
+create_both_channels 'demo9'
 
 # List channels
 docker exec cli bash -c "peer channel list"
 
+CC_LANG="node"
+CC_VERSION="1.0"
+CC_PATH="chaincode"
+
 # Install chaincode
-docker exec cli bash -c "peer chaincode install -n $CC_NAME -l $CC_LANG -v $CC_VERSION --path $CC_PATH"
+function install_chaincode {
+  docker exec cli bash -c "peer chaincode install -n $1 -l $CC_LANG -v $CC_VERSION --path $CC_PATH"
+}
+
+install_chaincode 'tlp-accounts'
+install_chaincode 'tlp-rates'
+install_chaincode 'tlp-loyalty'
 
 if [ $TARGET_ENV = "prod" ]; then
     ./instantiate.sh

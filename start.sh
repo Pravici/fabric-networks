@@ -19,8 +19,7 @@ export FABRIC_START_TIMEOUT=10
 #echo ${FABRIC_START_TIMEOUT}
 sleep ${FABRIC_START_TIMEOUT}
 
-ca_local=$( curl -X PUT http://127.0.0.1:5984/wallet )
-echo $ca_local
+curl -u "tlpstateuser:ufgVk0IP3Yh4ORJlzaRB4oCiGsPZJ2tb5fy6g4XW90I=" -X PUT http://127.0.0.1:5050/wallet
 
 # Create the channel
 function create_channel {

@@ -21,7 +21,7 @@ services:
       - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start -b admin:adminpw'
+    command: sh -c 'fabric-ca-server start -b "tlpcaadmin:UsvcNcG8hybMcLIj97BepDBi8JFtsOFiyr+1ZQv+7fg="'
     volumes:
       - ./crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.example.com
@@ -73,8 +73,8 @@ services:
       # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
       # provide the credentials for ledger to connect to CouchDB.  The username and password must
       # match the username and password set for the associated CouchDB.
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=tlpstateuser
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=ufgVk0IP3Yh4ORJlzaRB4oCiGsPZJ2tb5fy6g4XW90I=
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     # command: peer node start
     command: peer node start --peer-chaincodedev=true
@@ -98,10 +98,10 @@ services:
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
     # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
     environment:
-      - COUCHDB_USER=
-      - COUCHDB_PASSWORD=
+      - COUCHDB_USER=tlpstateuser
+      - COUCHDB_PASSWORD=ufgVk0IP3Yh4ORJlzaRB4oCiGsPZJ2tb5fy6g4XW90I=
     ports:
-      - 5984:5984
+      - 5050:5984
     networks:
       - blockchain
 

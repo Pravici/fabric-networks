@@ -46,7 +46,7 @@ configtxgen -channelID demo9issuer -outputCreateChannelTx ./config/demo9issuer.t
 ```
 
 ## View CouchDB
-Open <http://localhost:5984/_utils/#/_all_dbs> to view the database.
+Open <http://localhost:5050/_utils/#/_all_dbs> to view the database.
 
 ## Invoke Chaincode or Contract
 ```bash

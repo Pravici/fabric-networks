@@ -1,3 +1,8 @@
 #!/bin/bash
-docker exec cli bash -c "peer chaincode list --instantiated -C $1"
-docker exec cli bash -c "peer chaincode list --installed"
+set -ev
+source functions.sh
+
+list_installed_chaincodes
+if [ ! -z $1 ]; then
+  list_instantiated_chaincodes $1
+fi

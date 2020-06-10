@@ -1,23 +1,14 @@
 #!/bin/bash
 set -ev
+source functions.sh
 
-CHANNEL=$1
-CC_VERSION=$2
+CC_VERSION=$1
 if [ -z $CC_VERSION ] 
   then
-    echo "usage: ./upgrade.sh <channel> <version>"
+    echo ""
+    echo "usage: ./upgrade.sh <version> (example: ./upgrade.sh 1.1)"
     exit 1
 fi
 
-CC_LANG="node"
-CC_PATH="chaincode"
-
-# Upgrade chaincode
-function upgrade_chaincode {
-  docker exec cli bash -c "peer chaincode install -n $1 -l $CC_LANG -v $CC_VERSION -p $CC_PATH"
-  docker exec cli bash -c "peer chaincode upgrade -n $1 -l $CC_LANG -v $CC_VERSION -p $CC_PATH -C $CHANNEL -c '{\"Args\":[\"init\"]}' "
-}
-
-upgrade_chaincode 'tlp-accounts'
-upgrade_chaincode 'tlp-rates'
-upgrade_chaincode 'tlp-loyalty'
+install_chaincodes $CC_VERSION
+upgrade_demo_chaincodes $CC_VERSION

@@ -102,6 +102,19 @@ services:
     networks:
       - blockchain
 
+  wallet:
+    container_name: wallet
+    image: hyperledger/fabric-couchdb
+    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
+    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
+    environment:
+      - COUCHDB_USER=tlpstateuser
+      - COUCHDB_PASSWORD=ufgVk0IP3Yh4ORJlzaRB4oCiGsPZJ2tb5fy6g4XW90I=
+    ports:
+      - 5051:5984
+    networks:
+      - blockchain
+
   cli:
     container_name: cli
     image: hyperledger/fabric-tools

@@ -105,7 +105,7 @@ services:
     networks:
       - blockchain
 
-    wallet:
+  wallet:
     container_name: wallet
     image: hyperledger/fabric-couchdb
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password

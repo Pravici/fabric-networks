@@ -83,9 +83,9 @@ services:
       - 7052:7052
       - 7053:7053
     volumes:
-        - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/msp/peer
-        - ./crypto-config/peerOrganizations/org1.example.com/users:/etc/hyperledger/msp/users
+      - /var/run/:/host/var/run/
+      - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/msp/peer
+      - ./crypto-config/peerOrganizations/org1.example.com/users:/etc/hyperledger/msp/users
     depends_on:
       - orderer.example.com
       - couchdb
@@ -134,13 +134,13 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
     volumes:
-        - /var/run/:/host/var/run/
-        - ./config:/etc/hyperledger/configtx
-        - ./chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode/
-        - ./crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp:/etc/hyperledger/msp
+      - /var/run/:/host/var/run/
+      - ./config:/etc/hyperledger/configtx
+      - ./chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode/
+      - ./crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp:/etc/hyperledger/msp
     depends_on:
-     - orderer.example.com
-     - peer0.org1.example.com
-     - couchdb
+      - orderer.example.com
+      - peer0.org1.example.com
+      - couchdb
     networks:
       - blockchain

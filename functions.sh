@@ -36,6 +36,18 @@ function upgrade_chaincode {
   docker exec cli bash -c "peer chaincode upgrade -n $1 -l node -v $2 -p chaincode -C $3 -c '{\"Args\":[\"init\"]}' "
 }
 
+function teardown_chaincode {
+  docker stop dev-peer0.org1.example.com-tlp-accounts-$1
+  docker stop dev-peer0.org1.example.com-tlp-loyalty-$1
+  docker stop dev-peer0.org1.example.com-tlp-rates-$1
+
+  docker rm dev-peer0.org1.example.com-tlp-accounts-$1
+  docker rm dev-peer0.org1.example.com-tlp-loyalty-$1
+  docker rm dev-peer0.org1.example.com-tlp-rates-$1
+
+  docker rmi $(docker images --filter=reference="*dev-*-$1-*" -q)
+}
+
 function install_chaincodes {
   install_chaincode 'tlp-accounts' $1
   install_chaincode 'tlp-loyalty' $1
